@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Page de redirection avec compte à rebours</title>
     <style>
-        /* CSS sombre */
         body {
             font-family: Arial, sans-serif;
             background-color: #121212;
@@ -62,16 +61,13 @@
         .container {
             text-align: center;
         }
-
     </style>
     <script>
-        // Fonction pour récupérer un paramètre de l'URL
         function getUrlParameter(name) {
             const urlParams = new URLSearchParams(window.location.search);
             return urlParams.get(name);
         }
 
-        // Fonction pour mettre à jour la page en fonction des paramètres
         function updatePage() {
             const url = getUrlParameter('url');
             const time = getUrlParameter('time');
@@ -86,7 +82,7 @@
 
                     if (remainingTime <= 0) {
                         clearInterval(interval);
-                        window.location.href = url; // Rediriger vers l'URL
+                        window.location.href = url;
                     } else {
                         const secondsLeft = Math.ceil(remainingTime / 1000);
                         countdownDisplay.textContent = 'Temps restant: ' + secondsLeft + ' secondes';
@@ -97,12 +93,13 @@
             }
         }
 
-        // Fonction pour recharger la page avec les paramètres saisis
         function reloadWithParams() {
             const urlInput = document.getElementById('urlInput').value;
             const timeInput = document.getElementById('timeInput').value;
+            const secondsInput = parseInt(document.getElementById('secondsInput').value) || 0;
+
             if (urlInput && timeInput) {
-                const timeInMilliseconds = new Date(timeInput).getTime();
+                const timeInMilliseconds = new Date(timeInput).getTime() + (secondsInput * 1000);
                 window.location.search = `?url=${encodeURIComponent(urlInput)}&time=${timeInMilliseconds}`;
             } else {
                 alert('Veuillez remplir tous les champs.');
@@ -117,13 +114,17 @@
         <h1>Page de redirection avec compte à rebours</h1>
         <p id="countdown"></p>
 
-        <!-- Formulaire pour saisir URL et Heure si les paramètres sont absents -->
         <div id="inputForm">
-            <h2>Veuillez entrer l'URL et l'heure de redirection:</h2>
-            <label for="urlInput">URL:</label>
+            <h2>Veuillez entrer l'URL et l'heure de redirection :</h2>
+            <label for="urlInput">URL :</label>
             <input type="text" id="urlInput" placeholder="https://exemple.com"><br><br>
-            <label for="timeInput">Heure de redirection (format : YYYY-MM-DD HH:mm:ss):</label>
+
+            <label for="timeInput">Heure de redirection (format : YYYY-MM-DD HH:mm):</label>
             <input type="datetime-local" id="timeInput"><br><br>
+
+            <label for="secondsInput">Secondes :</label>
+            <input type="number" id="secondsInput" min="0" max="59" value="0"><br><br>
+
             <button onclick="reloadWithParams()">Confirmer</button>
         </div>
     </div>
